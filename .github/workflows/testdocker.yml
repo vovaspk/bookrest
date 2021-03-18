@@ -5,7 +5,7 @@ name: test and build dockerized version
 
 on:
   push:
-    branches: [dockerized]
+    branches: [master]
   pull_request:
 
 
