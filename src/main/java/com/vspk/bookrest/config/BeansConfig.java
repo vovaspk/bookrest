@@ -4,7 +4,7 @@ import com.vspk.bookrest.repository.RoleRepository;
 import com.vspk.bookrest.repository.UserRepository;
 import com.vspk.bookrest.security.JwtTokenProvider;
 import com.vspk.bookrest.service.UserService;
-import com.vspk.bookrest.service.impl.AuthenticationServiceImpl;
+import com.vspk.bookrest.service.impl.UserAuthServiceImpl;
 import com.vspk.bookrest.service.impl.UserServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,7 +19,8 @@ public class BeansConfig {
     }
 
     @Bean
-    public AuthenticationServiceImpl authenticationService(AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider, UserService userService){
-        return new AuthenticationServiceImpl(authenticationManager, jwtTokenProvider, userService);
+    public UserAuthServiceImpl authenticationService(AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider, UserService userService,
+                                                     RoleRepository roleRepository, BCryptPasswordEncoder passwordEncoder){
+        return new UserAuthServiceImpl(authenticationManager, jwtTokenProvider, userService, roleRepository, passwordEncoder);
     }
 }

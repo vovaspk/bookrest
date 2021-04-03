@@ -11,6 +11,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import java.util.Date;
 
 @MappedSuperclass
@@ -32,5 +34,16 @@ public class BaseEntity {
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
     private Status status;
+
+    @PrePersist
+    protected void onCreate() {
+        created = new Date();
+        updated = new Date();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updated = new Date();
+    }
 
 }

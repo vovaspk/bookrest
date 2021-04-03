@@ -1,6 +1,7 @@
 package com.vspk.bookrest.domain;
 
 import lombok.Data;
+import lombok.ToString;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,7 +17,7 @@ import java.util.List;
 @Table(name = "users")
 public class User extends BaseEntity {
 
-    @Column(name = "username")
+    @Column(name = "username", unique = true)
     private String username;
 
     @Column(name = "first_name")
@@ -28,6 +29,7 @@ public class User extends BaseEntity {
     @Column(name = "email")
     private String email;
 
+    @ToString.Exclude
     @Column(name = "password")
     private String password;
 

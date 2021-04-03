@@ -1,6 +1,7 @@
 package com.vspk.bookrest.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.sun.istack.NotNull;
 import com.vspk.bookrest.domain.User;
 import lombok.Data;
 
@@ -8,6 +9,7 @@ import lombok.Data;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class UserDto {
     //private Long id;
+    //TODO add annotations (notNull, not empty)
     private String username;
     private String firstName;
     private String lastName;

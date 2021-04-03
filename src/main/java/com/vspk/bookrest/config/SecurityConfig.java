@@ -13,6 +13,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private static final String ADMIN_ENDPOINT = "/api/v1/admin/**";
     private static final String LOGIN_ENDPOINT = "/api/v1/auth/login";
+    private static final String REGISTER_ENDPOINT = "/api/v1/auth/register";
     private JwtTokenProvider jwtTokenProvider;
 
     public SecurityConfig(JwtTokenProvider jwtTokenProvider){
@@ -42,7 +43,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/swagger-ui/*").permitAll()
                 .antMatchers("/webjars/**").permitAll()
                 .antMatchers("/v2/**").permitAll()
-                .antMatchers(LOGIN_ENDPOINT, "/v2/api-docs", "/swagger-ui.html", "/v2/swagger-ui.html").permitAll()
+                .antMatchers(LOGIN_ENDPOINT, REGISTER_ENDPOINT, "/v2/api-docs", "/swagger-ui.html", "/v2/swagger-ui.html").permitAll()
                 .antMatchers(ADMIN_ENDPOINT).hasRole("ADMIN")
                 .anyRequest().authenticated()
                 .and()

@@ -6,6 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import java.util.List;
 
@@ -19,6 +20,7 @@ public class Role extends BaseEntity{
     @Column(name = "name")
     private String name;
 
+    @Transient
     @ManyToMany(mappedBy = "roles", fetch = LAZY)
     private List<User> users;
 

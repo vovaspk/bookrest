@@ -1,7 +1,5 @@
 package com.vspk.bookrest.service.impl;
 
-import com.vspk.bookrest.domain.Role;
-import com.vspk.bookrest.domain.Status;
 import com.vspk.bookrest.domain.User;
 import com.vspk.bookrest.repository.RoleRepository;
 import com.vspk.bookrest.repository.UserRepository;
@@ -10,8 +8,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -22,20 +20,10 @@ public class UserServiceImpl implements UserService {
     private final BCryptPasswordEncoder passwordEncoder;
 
     @Override
-    public User register(User user) {
-        Role roleUser = roleRepository.findByName("ROLE_USER");
-        List<Role> userRoles = new ArrayList<>();
-        userRoles.add(roleUser);
-
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setRoles(userRoles);
-        user.setStatus(Status.ACTIVE);
-
-        User registeredUser = userRepository.save(user);
-
-        log.info("IN register - user: {} successfully registered", registeredUser);
-
-        return registeredUser;
+    public User save(User user){
+        User savedUser = userRepository.save(user);
+        log.info("In save - user saved with userId: {}", savedUser.getId());
+        return savedUser;
     }
 
     @Override
@@ -46,19 +34,34 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User findByUsername(String username) {
-        User result = userRepository.findByUsername(username);
-        log.info("IN findByUsername - user: {} found by username: {}", result, username);
-        return result;
+    public Optional<User> findByUsername(String username) {
+        Optional<User> foundUser = userRepository.findByUsername(username);
+        if(foundUser.isEmpty()){
+            log.warn("user not found with username: {}", username);
+            return Optional.empty();
+        }
+        log.info("IN findByUsername - user: {} found by username: {}", foundUser, username);
+        return foundUser;
     }
 
     @Override
-    public User findById(Long id) {
-        User result = userRepository.findById(id).orElse(null);
+    public Optional<User> findByEmail(String email) {
+        Optional<User> foundUser = userRepository.findUserByEmail(email);
+        if(foundUser.isEmpty()){
+            log.warn("user not found with email: {}", email);
+            return Optional.empty();
+        }
+        log.info("IN findByEmail - user: {} found with email: {}", foundUser, email);
+        return foundUser;
+    }
 
-        if (result == null) {
-            log.warn("IN findById - no user found by id: {}", id);
-            return null;
+    @Override
+    public Optional<User> findById(Long id) {
+        Optional<User> result = userRepository.findById(id);
+
+        if (result.isEmpty()) {
+            log.warn("IN findById - user not found by id: {}", id);
+            return Optional.empty();
         }
 
         log.info("IN findById - user: {} found by id: {}", result, id);
