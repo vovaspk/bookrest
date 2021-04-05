@@ -85,7 +85,7 @@ public class UserAuthServiceImpl implements UserAuthService {
 
         var registeredUser = userService.save(newUser);
 
-        log.info("IN register - user: {} successfully registered", registeredUser);
+        log.info("user successfully registered: {} ", registeredUser);
 
         var response = new HashMap<>();
         response.put("user", registeredUser);

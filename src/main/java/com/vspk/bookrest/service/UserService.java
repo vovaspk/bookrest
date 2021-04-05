@@ -17,4 +17,7 @@ public interface UserService {
     Optional<User> findById(Long id);
 
     void delete(Long id);
+
+    //for tests purposes only
+    void deleteAll();
 }
