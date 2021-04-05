@@ -35,7 +35,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Optional<User> findByUsername(String username) {
-        Optional<User> foundUser = userRepository.findByUsername(username);
+        var foundUser = userRepository.findByUsername(username);
         if(foundUser.isEmpty()){
             log.warn("user not found with username: {}", username);
             return Optional.empty();
@@ -46,7 +46,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Optional<User> findByEmail(String email) {
-        Optional<User> foundUser = userRepository.findUserByEmail(email);
+        var foundUser = userRepository.findUserByEmail(email);
         if(foundUser.isEmpty()){
             log.warn("user not found with email: {}", email);
             return Optional.empty();
@@ -57,7 +57,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Optional<User> findById(Long id) {
-        Optional<User> result = userRepository.findById(id);
+        var result = userRepository.findById(id);
 
         if (result.isEmpty()) {
             log.warn("IN findById - user not found by id: {}", id);

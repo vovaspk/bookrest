@@ -42,7 +42,7 @@ public class UserAuthServiceImpl implements UserAuthService {
         try {
             String username = requestDto.getUsername();
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, requestDto.getPassword()));
-            Optional<User> user = userService.findByUsername(username);
+            var user = userService.findByUsername(username);
 
             if (user.isEmpty()) {
                 throw new UsernameNotFoundException("User with username: " + username + " not found");
@@ -76,18 +76,18 @@ public class UserAuthServiceImpl implements UserAuthService {
         List<Role> userRoles = new ArrayList<>();
         userRoles.add(userRole);
 
-        User newUser = new User();
+        var newUser = new User();
         newUser.setUsername(dto.getUsername());
         newUser.setEmail(dto.getEmail());
         newUser.setPassword(passwordEncoder.encode(dto.getPassword()));
         newUser.setRoles(userRoles);
         newUser.setStatus(Status.ACTIVE);
 
-        User registeredUser = userService.save(newUser);
+        var registeredUser = userService.save(newUser);
 
         log.info("IN register - user: {} successfully registered", registeredUser);
 
-        Map<Object, Object> response = new HashMap<>();
+        var response = new HashMap<>();
         response.put("user", registeredUser);
         return new ResponseEntity(response, HttpStatus.CREATED);
     }
