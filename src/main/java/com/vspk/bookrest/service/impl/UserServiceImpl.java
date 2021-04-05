@@ -1,12 +1,10 @@
 package com.vspk.bookrest.service.impl;
 
 import com.vspk.bookrest.domain.User;
-import com.vspk.bookrest.repository.RoleRepository;
 import com.vspk.bookrest.repository.UserRepository;
 import com.vspk.bookrest.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,8 +14,6 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-    private final RoleRepository roleRepository;
-    private final BCryptPasswordEncoder passwordEncoder;
 
     @Override
     public User save(User user){
@@ -72,5 +68,11 @@ public class UserServiceImpl implements UserService {
     public void delete(Long id) {
         userRepository.deleteById(id);
         log.info("IN delete - user with id: {} successfully deleted", id);
+    }
+
+    @Override
+    public void deleteAll() {
+        userRepository.deleteAll();
+        log.info("table users cleared");
     }
 }

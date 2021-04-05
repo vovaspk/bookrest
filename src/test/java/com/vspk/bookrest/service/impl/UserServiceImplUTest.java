@@ -30,17 +30,13 @@ class UserServiceImplUTest {
 
     @Mock
     private UserRepository userRepository;
-    @Mock
-    private RoleRepository roleRepository;
-    @Mock
-    private BCryptPasswordEncoder passwordEncoder;
 
     @InjectMocks
     private UserServiceImpl userService;
 
     @BeforeEach
     void setUp() {
-        userService = new UserServiceImpl(userRepository, roleRepository, passwordEncoder);
+        userService = new UserServiceImpl(userRepository);
     }
 
     @AfterEach
