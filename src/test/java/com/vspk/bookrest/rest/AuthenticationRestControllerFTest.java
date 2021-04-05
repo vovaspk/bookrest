@@ -1,4 +1,4 @@
-package com.vspk.bookrest.service.impl;
+package com.vspk.bookrest.rest;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class UserServiceImplTest {
+class AuthenticationRestControllerFTest {
 
     @BeforeEach
     void setUp() {
@@ -17,22 +17,10 @@ class UserServiceImplTest {
     }
 
     @Test
+    void login() {
+    }
+
+    @Test
     void register() {
-    }
-
-    @Test
-    void getAll() {
-    }
-
-    @Test
-    void findByUsername() {
-    }
-
-    @Test
-    void findById() {
-    }
-
-    @Test
-    void delete() {
     }
 }
