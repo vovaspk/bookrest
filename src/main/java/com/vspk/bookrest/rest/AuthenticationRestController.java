@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.security.RolesAllowed;
+import javax.validation.Valid;
 import java.util.Map;
 
 @RestController
@@ -24,14 +25,14 @@ public class AuthenticationRestController {
 
     @CrossOrigin(origins = "*")
     @PostMapping("login")
-    public ResponseEntity login(@RequestBody AuthenticationRequestDto requestDto) {
+    public ResponseEntity login(@RequestBody @Valid AuthenticationRequestDto requestDto) {
         Map<Object, Object> response = userAuthService.authenticate(requestDto);
         return ResponseEntity.ok(response);
     }
 
     @CrossOrigin(origins = "*")
     @PostMapping("register")
-    public ResponseEntity register(@RequestBody RegistrationDto requestDto) {
+    public ResponseEntity register(@RequestBody @Valid RegistrationDto requestDto) {
         return userAuthService.register(requestDto);
     }
 

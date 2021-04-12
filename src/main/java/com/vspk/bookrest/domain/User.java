@@ -1,5 +1,6 @@
 package com.vspk.bookrest.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.ToString;
 
@@ -28,8 +29,9 @@ public class User extends BaseEntity {
 
     @Column(name = "email")
     private String email;
-
+//exclude password from sending to client, add validation to login and registration
     @ToString.Exclude
+    @JsonIgnore
     @Column(name = "password")
     private String password;
 
