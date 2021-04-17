@@ -1,4 +1,4 @@
-FROM adoptopenjdk/openjdk15:jdk-15.0.2_7-alpine-slim
+FROM adoptopenjdk/openjdk15:jre-15.0.2_7-alpine
 
 #heroku has only database_url and token_secret
 RUN mkdir -p /workspace
