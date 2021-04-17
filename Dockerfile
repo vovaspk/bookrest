@@ -4,7 +4,7 @@ FROM openjdk:15-alpine
 RUN mkdir -p /workspace
 WORKDIR /workspace
 
-COPY /target/bookrest-0.0.1-SNAPSHOT.jar /workspace/bookrest-0.0.1-SNAPSHOT.jar
+COPY target/*.jar /workspace/bookrest-0.0.1-SNAPSHOT.jar
 
 RUN ls -l
 
