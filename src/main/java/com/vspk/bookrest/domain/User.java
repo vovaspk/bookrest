@@ -29,7 +29,7 @@ public class User extends BaseEntity {
 
     @Column(name = "email")
     private String email;
-//exclude password from sending to client, add validation to login and registration
+
     @ToString.Exclude
     @JsonIgnore
     @Column(name = "password")
