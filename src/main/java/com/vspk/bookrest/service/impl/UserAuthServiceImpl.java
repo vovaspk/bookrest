@@ -5,6 +5,7 @@ import com.vspk.bookrest.domain.Status;
 import com.vspk.bookrest.domain.User;
 import com.vspk.bookrest.dto.AuthenticationRequestDto;
 import com.vspk.bookrest.dto.RegistrationDto;
+import com.vspk.bookrest.dto.UserDto;
 import com.vspk.bookrest.repository.RoleRepository;
 import com.vspk.bookrest.security.JwtTokenProvider;
 import com.vspk.bookrest.service.UserAuthService;
@@ -89,6 +90,9 @@ public class UserAuthServiceImpl implements UserAuthService {
 
         var response = new HashMap<>();
         response.put("user", registeredUser);
+        //TODO maybe change to line below
+        // response.put("user", UserDto.fromUser(registeredUser));
+
         return new ResponseEntity(response, HttpStatus.CREATED);
     }
 

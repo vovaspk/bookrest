@@ -5,7 +5,7 @@ name: Build and test
 
 on:
   push:
-    branches: [master]
+    branches: [ master ]
   pull_request:
 
 
@@ -35,3 +35,22 @@ jobs:
           java-version: 15
       - name: Build with Maven
         run: mvn -B package --file pom.xml
+
+  deploy:
+    runs-on: ubuntu-latest
+
+    if: github.ref == 'refs/heads/master'
+    steps:
+      - uses: actions/checkout@v1
+      - name: Login to Heroku
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+        run: heroku container:login
+      - name: Build and push
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+        run: heroku container:push -a ${{ secrets.HEROKU_APP_NAME }} web
+      - name: Release to Production
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+        run: heroku container:release -a ${{ secrets.HEROKU_APP_NAME }} web

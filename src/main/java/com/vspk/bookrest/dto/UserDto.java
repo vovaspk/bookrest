@@ -8,8 +8,6 @@ import lombok.Data;
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class UserDto {
-    //private Long id;
-    //TODO add annotations (notNull, not empty)
     private String username;
     private String firstName;
     private String lastName;
@@ -17,7 +15,6 @@ public class UserDto {
 
     public User toUser(){
         User user = new User();
-        //user.setId(id);
         user.setUsername(username);
         user.setFirstName(firstName);
         user.setLastName(lastName);
@@ -28,7 +25,6 @@ public class UserDto {
 
     public static UserDto fromUser(User user) {
         UserDto userDto = new UserDto();
-        //userDto.setId(user.getId());
         userDto.setUsername(user.getUsername());
         userDto.setFirstName(user.getFirstName());
         userDto.setLastName(user.getLastName());
