@@ -10,5 +10,5 @@ RUN ls -l
 
 EXPOSE 8080:8080
 
-CMD java -Dserver.port=$PORT -Dspring.profiles.active=prod -jar /workspace/bookrest-0.0.1-SNAPSHOT.jar
+CMD java -Dserver.port=$PORT -Dspring.profiles.active=prod $JAVA_OPTS -jar /workspace/bookrest-0.0.1-SNAPSHOT.jar
 #ENTRYPOINT ["java", "-DSpring.profiles.active=dev", "-jar", "/workspace/bookrest-0.0.1-SNAPSHOT.jar"]
