@@ -7,6 +7,8 @@ import com.vspk.bookrest.payload.RegistrationResponse;
 import com.vspk.bookrest.service.UserAuthService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -35,13 +37,21 @@ public class AuthenticationRestController {
 
 //TODO make functional tests
     @ApiOperation(value = "login",response = LoginResponse.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successfully logged in system", response = LoginResponse.class),
+            @ApiResponse(code = 401, message = "username or password is wrong, authorization failed")
+    })
     @CrossOrigin(origins = "*")
     @PostMapping(value = "login")
     public ResponseEntity<?> login(@RequestBody @Valid AuthenticationRequestDto requestDto) {
         return userAuthService.authenticate(requestDto);
     }
 
-    @ApiOperation(value = "View a list of available products",response = RegistrationResponse.class)
+    @ApiOperation(value = "registration",response = RegistrationResponse.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Successfully registered user", response = RegistrationResponse.class),
+            @ApiResponse(code = 401, message = "failed to register user, check username and email on uniqueness")
+    })
     @CrossOrigin(origins = "*")
     @PostMapping("register")
     public ResponseEntity register(@RequestBody @Valid RegistrationDto requestDto) {
