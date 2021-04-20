@@ -14,9 +14,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.List;
@@ -26,6 +28,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -66,11 +69,11 @@ class UserAuthServiceImplUTest {
         when(userService.findByUsername("testusername")).thenReturn(Optional.of(testUser));
         when(jwtTokenProvider.createToken(testUser.getUsername(), testUser.getRoles())).thenReturn("successToken");
 
-        Map<Object, Object> response = authService.authenticate(authRequestDto());
+        ResponseEntity<?> response = authService.authenticate(authRequestDto());
 
-        assertEquals("testusername", response.get("username"));
-        assertEquals("successToken", response.get("token"));
-        assertEquals(testUser.getRoles(), response.get("roles"));
+        assertTrue(response.getBody().toString().contains("testusername"));
+        assertTrue( response.getBody().toString().contains("successToken"));
+        assertTrue(response.getBody().toString().contains(("roles")));
 
     }
 
@@ -79,9 +82,9 @@ class UserAuthServiceImplUTest {
         Authentication auth = mock(Authentication.class);
         auth.setAuthenticated(false);
 
-        when(authenticationManager.authenticate(any())).thenThrow(new BadCredentialsException("invalid username or password"));
-
-        assertThrows(BadCredentialsException.class, () -> authService.authenticate(authRequestDto()));
+        var response = authService.authenticate(authRequestDto());
+        assertEquals(401, response.getStatusCode().value());
+        assertEquals("AuthFailedResponse(errorMessage=Invalid username or password)", response.getBody().toString());
     }
 
     @Test

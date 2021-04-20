@@ -6,6 +6,8 @@ import com.vspk.bookrest.domain.Status;
 import com.vspk.bookrest.domain.User;
 import com.vspk.bookrest.dto.AuthenticationRequestDto;
 import com.vspk.bookrest.dto.RegistrationDto;
+import com.vspk.bookrest.payload.LoginResponse;
+import com.vspk.bookrest.payload.RegistrationResponse;
 import com.vspk.bookrest.repository.RoleRepository;
 import com.vspk.bookrest.security.JwtTokenProvider;
 import com.vspk.bookrest.service.UserAuthService;
@@ -51,19 +53,30 @@ class UserAuthServiceImplITest extends AbstractContainerITest {
     void authenticate() {
         userService.save(getUser());
 
-        Map<Object, Object> response = authService.authenticate(authDto());
+        ResponseEntity<?> response = authService.authenticate(authDto());
+        LoginResponse body = (LoginResponse) response.getBody();
 
-        assertEquals("testusername", response.get("username"));
-        assertNotNull(response.get("token"));
-        assertEquals(getUser().getRoles(), response.get("roles"));
+        assert body != null;
+        assertEquals("testusername", body.getUsername());
+        assertNotNull(body.getToken());
+        assertEquals(getUser().getRoles(), body.getRoles());
+
     }
 
     @Test
     void register() {
+        Role role_user = roleRepository.findByName("ROLE_USER");
+
         ResponseEntity response = authService.register(registerDto());
+        RegistrationResponse body = (RegistrationResponse) response.getBody();
+        assert body != null;
+
 
         assertEquals(HttpStatus.CREATED.value(), response.getStatusCode().value());
-        assertTrue(response.getBody().toString().contains("{user=User(username=testusername, firstName=null, lastName=null, email=testemail@gmail.com, roles=[Role{id: 1, name: ROLE_USER}])}"));
+        assertEquals("testemail@gmail.com", body.getRegisteredUser().getEmail());
+        assertEquals("testusername", body.getRegisteredUser().getUsername());
+
+        assertEquals(List.of(role_user), body.getRegisteredUser().getRoles());
     }
 
     private AuthenticationRequestDto authDto(){

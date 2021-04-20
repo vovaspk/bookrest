@@ -6,10 +6,16 @@ import com.vspk.bookrest.domain.User;
 import com.vspk.bookrest.dto.AuthenticationRequestDto;
 import com.vspk.bookrest.dto.RegistrationDto;
 import com.vspk.bookrest.dto.UserDto;
+import com.vspk.bookrest.exception.UserAlreadyExistsException;
+import com.vspk.bookrest.payload.AuthFailedResponse;
+import com.vspk.bookrest.payload.LoginResponse;
+import com.vspk.bookrest.payload.RegistrationResponse;
 import com.vspk.bookrest.repository.RoleRepository;
 import com.vspk.bookrest.security.JwtTokenProvider;
 import com.vspk.bookrest.service.UserAuthService;
 import com.vspk.bookrest.service.UserService;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.models.Response;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -29,6 +35,7 @@ import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor
+
 public class UserAuthServiceImpl implements UserAuthService {
 
     private final AuthenticationManager authenticationManager;
@@ -39,26 +46,17 @@ public class UserAuthServiceImpl implements UserAuthService {
 
 
     @Override
-    public Map<Object, Object> authenticate(AuthenticationRequestDto requestDto) {
+    public ResponseEntity<?> authenticate(AuthenticationRequestDto requestDto) {
         try {
             String username = requestDto.getUsername();
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, requestDto.getPassword()));
-            var user = userService.findByUsername(username);
+            var user = userService.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User with username: " + username + " not found"));
 
-            if (user.isEmpty()) {
-                throw new UsernameNotFoundException("User with username: " + username + " not found");
-            }
+            String token = jwtTokenProvider.createToken(username, user.getRoles());
 
-            String token = jwtTokenProvider.createToken(username, user.get().getRoles());
-
-            Map<Object, Object> response = new HashMap<>();
-            response.put("username", username);
-            response.put("token", token);
-            response.put("roles", user.get().getRoles());
-
-            return response;
+            return ResponseEntity.ok().body(new LoginResponse(username, token, user.getRoles()));
         } catch (AuthenticationException e) {
-            throw new BadCredentialsException("Invalid username or password");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new AuthFailedResponse("Invalid username or password"));
         }
     }
 
@@ -66,11 +64,11 @@ public class UserAuthServiceImpl implements UserAuthService {
     public ResponseEntity register(RegistrationDto dto){
 
         if (existsByUsername(dto.getUsername())) {
-            return new ResponseEntity<>("Failed to register user, username is already taken!", HttpStatus.BAD_REQUEST);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new AuthFailedResponse("Failed to register user, username is already taken!"));
         }
 
         if (existsByEmail(dto.getEmail())) {
-            return new ResponseEntity<>("Failed to register user, email is already in use!", HttpStatus.BAD_REQUEST);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new AuthFailedResponse("Failed to register user, email is already in use!"));
         }
 
         Role userRole = roleRepository.findByName("ROLE_USER");
@@ -88,12 +86,10 @@ public class UserAuthServiceImpl implements UserAuthService {
 
         log.info("user successfully registered: {} ", registeredUser);
 
-        var response = new HashMap<>();
-        response.put("user", registeredUser);
-        //TODO maybe change to line below
-        // response.put("user", UserDto.fromUser(registeredUser));
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(new RegistrationResponse(registeredUser));
 
-        return new ResponseEntity(response, HttpStatus.CREATED);
     }
 
     private boolean existsByUsername(String username){
