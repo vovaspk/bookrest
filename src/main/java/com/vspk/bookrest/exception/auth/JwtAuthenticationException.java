@@ -1,4 +1,4 @@
-package com.vspk.bookrest.exception;
+package com.vspk.bookrest.exception.auth;
 
 import lombok.Getter;
 import org.springframework.http.HttpStatus;

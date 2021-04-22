@@ -5,37 +5,29 @@ import com.vspk.bookrest.domain.Status;
 import com.vspk.bookrest.domain.User;
 import com.vspk.bookrest.dto.AuthenticationRequestDto;
 import com.vspk.bookrest.dto.RegistrationDto;
-import com.vspk.bookrest.dto.UserDto;
-import com.vspk.bookrest.exception.UserAlreadyExistsException;
-import com.vspk.bookrest.payload.AuthFailedResponse;
+import com.vspk.bookrest.exception.auth.JwtAuthenticationException;
+import com.vspk.bookrest.exception.auth.UserAlreadyExistsException;
 import com.vspk.bookrest.payload.LoginResponse;
 import com.vspk.bookrest.payload.RegistrationResponse;
 import com.vspk.bookrest.repository.RoleRepository;
 import com.vspk.bookrest.security.JwtTokenProvider;
 import com.vspk.bookrest.service.UserAuthService;
 import com.vspk.bookrest.service.UserService;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.models.Response;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor
-
 public class UserAuthServiceImpl implements UserAuthService {
 
     private final AuthenticationManager authenticationManager;
@@ -43,7 +35,6 @@ public class UserAuthServiceImpl implements UserAuthService {
     private final UserService userService;
     private final RoleRepository roleRepository;
     private final BCryptPasswordEncoder passwordEncoder;
-
 
     @Override
     public ResponseEntity<?> authenticate(AuthenticationRequestDto requestDto) {
@@ -56,20 +47,13 @@ public class UserAuthServiceImpl implements UserAuthService {
 
             return ResponseEntity.ok().body(new LoginResponse(username, token, user.getRoles()));
         } catch (AuthenticationException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new AuthFailedResponse("Invalid username or password"));
+            throw new JwtAuthenticationException("Invalid username or password", HttpStatus.UNAUTHORIZED);
         }
     }
 
     @Override
-    public ResponseEntity register(RegistrationDto dto){
-
-        if (existsByUsername(dto.getUsername())) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new AuthFailedResponse("Failed to register user, username is already taken!"));
-        }
-
-        if (existsByEmail(dto.getEmail())) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new AuthFailedResponse("Failed to register user, email is already in use!"));
-        }
+    public ResponseEntity<?> register(RegistrationDto dto) {
+        validate(dto);
 
         Role userRole = roleRepository.findByName("ROLE_USER");
         List<Role> userRoles = new ArrayList<>();
@@ -92,11 +76,24 @@ public class UserAuthServiceImpl implements UserAuthService {
 
     }
 
-    private boolean existsByUsername(String username){
+    private void validate(RegistrationDto dto) {
+        String username = dto.getUsername();
+        String email = dto.getEmail();
+
+        if (existsByUsername(username)) {
+            throw new UserAlreadyExistsException(username, "Failed to register user, username [" + username + "] is already taken!");
+        }
+
+        if (existsByEmail(email)) {
+            throw new UserAlreadyExistsException(email, "Failed to register user, email [" + email + "] is already in use!");
+        }
+    }
+
+    private boolean existsByUsername(String username) {
         return userService.findByUsername(username).isPresent();
     }
 
-    private boolean existsByEmail(String email){
+    private boolean existsByEmail(String email) {
         return userService.findByEmail(email).isPresent();
     }
 }

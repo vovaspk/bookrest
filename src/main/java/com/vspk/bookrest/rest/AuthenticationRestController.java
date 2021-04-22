@@ -2,7 +2,7 @@ package com.vspk.bookrest.rest;
 
 import com.vspk.bookrest.dto.AuthenticationRequestDto;
 import com.vspk.bookrest.dto.RegistrationDto;
-import com.vspk.bookrest.payload.AuthFailedResponse;
+import com.vspk.bookrest.payload.AuthApiError;
 import com.vspk.bookrest.payload.LoginResponse;
 import com.vspk.bookrest.payload.RegistrationResponse;
 import com.vspk.bookrest.service.UserAuthService;
@@ -25,7 +25,6 @@ import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 import java.time.Instant;
 import java.util.Date;
-import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/api/v1/auth/")
@@ -40,7 +39,7 @@ public class AuthenticationRestController {
     @ApiOperation(value = "login",response = LoginResponse.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully logged in system", response = LoginResponse.class),
-            @ApiResponse(code = 401, message = "username or password is wrong, authorization failed", response = AuthFailedResponse.class)
+            @ApiResponse(code = 401, message = "username or password is wrong, authorization failed", response = AuthApiError.class)
     })
     @CrossOrigin(origins = "*")
     @PostMapping(value = "login")
@@ -51,17 +50,17 @@ public class AuthenticationRestController {
     @ApiOperation(value = "registration",response = RegistrationResponse.class)
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "Successfully registered user", response = RegistrationResponse.class),
-            @ApiResponse(code = 401, message = "failed to register user, check username and email on uniqueness", response = AuthFailedResponse.class)
+            @ApiResponse(code = 401, message = "failed to register user, check username and email on uniqueness", response = AuthApiError.class)
     })
     @CrossOrigin(origins = "*")
     @PostMapping("register")
-    public ResponseEntity register(@RequestBody @Valid RegistrationDto requestDto) {
+    public ResponseEntity<?> register(@RequestBody @Valid RegistrationDto requestDto) {
         return userAuthService.register(requestDto);
     }
 
     @CrossOrigin(origins = "*")
     @PostMapping("test")
-    public ResponseEntity test() {
+    public ResponseEntity<?> test() {
         return ResponseEntity.status(HttpStatus.OK).body(new TestDto("test response", Date.from(Instant.now())));
     }
 

@@ -9,5 +9,5 @@ import java.util.Map;
 
 public interface UserAuthService {
     ResponseEntity<?> authenticate(AuthenticationRequestDto authenticationRequestDto);
-    ResponseEntity register(RegistrationDto registrationDto);
+    ResponseEntity<?> register(RegistrationDto registrationDto);
 }

@@ -1,7 +1,7 @@
 package com.vspk.bookrest.security;
 
 import com.vspk.bookrest.domain.Role;
-import com.vspk.bookrest.exception.JwtAuthenticationException;
+import com.vspk.bookrest.exception.auth.JwtAuthenticationException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;

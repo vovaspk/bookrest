@@ -4,6 +4,8 @@ import com.vspk.bookrest.domain.Role;
 import com.vspk.bookrest.domain.User;
 import com.vspk.bookrest.dto.AuthenticationRequestDto;
 import com.vspk.bookrest.dto.RegistrationDto;
+import com.vspk.bookrest.exception.auth.JwtAuthenticationException;
+import com.vspk.bookrest.exception.auth.UserAlreadyExistsException;
 import com.vspk.bookrest.repository.RoleRepository;
 import com.vspk.bookrest.security.JwtTokenProvider;
 import com.vspk.bookrest.service.UserService;
@@ -16,13 +18,10 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -72,7 +71,7 @@ class UserAuthServiceImplUTest {
         ResponseEntity<?> response = authService.authenticate(authRequestDto());
 
         assertTrue(response.getBody().toString().contains("testusername"));
-        assertTrue( response.getBody().toString().contains("successToken"));
+        assertTrue(response.getBody().toString().contains("successToken"));
         assertTrue(response.getBody().toString().contains(("roles")));
 
     }
@@ -82,9 +81,10 @@ class UserAuthServiceImplUTest {
         Authentication auth = mock(Authentication.class);
         auth.setAuthenticated(false);
 
-        var response = authService.authenticate(authRequestDto());
-        assertEquals(401, response.getStatusCode().value());
-        assertEquals("AuthFailedResponse(errorMessage=Invalid username or password)", response.getBody().toString());
+        //var response = authService.authenticate(authRequestDto());
+        assertThrows(JwtAuthenticationException.class, () -> authService.authenticate(authRequestDto()));
+//        assertEquals(401, response.getStatusCode().value());
+//        assertEquals("AuthFailedResponse(errorMessage=Invalid username or password)", response.getBody().toString());
     }
 
     @Test
@@ -118,8 +118,9 @@ class UserAuthServiceImplUTest {
 
         when(userService.findByUsername(registerDto.getUsername())).thenReturn(Optional.of(getUser()));
 
-        var registerResponse = authService.register(registerDto);
-        assertEquals(400, registerResponse.getStatusCode().value());
+        //var registerResponse = authService.register(registerDto);
+        assertThrows(UserAlreadyExistsException.class, () -> authService.register(registerDto));
+        //assertEquals(400, registerResponse.getStatusCode().value());
 
     }
 
@@ -130,11 +131,12 @@ class UserAuthServiceImplUTest {
         when(userService.findByEmail(registerDto.getEmail())).thenReturn(Optional.of(getUser()));
 
 
-        var registerResponse = authService.register(registerDto);
-        assertEquals(400, registerResponse.getStatusCode().value());
+        //var registerResponse = authService.register(registerDto);
+        assertThrows(UserAlreadyExistsException.class, () -> authService.register(registerDto));
+        //assertEquals(400, registerResponse.getStatusCode().value());
     }
 
-    private RegistrationDto registerDto(){
+    private RegistrationDto registerDto() {
         RegistrationDto dto = new RegistrationDto();
         dto.setEmail("testemail@gmail.com");
         dto.setUsername("testusername");
@@ -143,8 +145,8 @@ class UserAuthServiceImplUTest {
         return dto;
     }
 
-    private AuthenticationRequestDto authRequestDto(){
-        var authdto =  new AuthenticationRequestDto();
+    private AuthenticationRequestDto authRequestDto() {
+        var authdto = new AuthenticationRequestDto();
         authdto.setUsername("testusername");
         authdto.setPassword("1234");
 
