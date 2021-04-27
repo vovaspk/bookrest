@@ -1,7 +1,7 @@
 package com.vspk.bookrest.rest;
 
-import com.vspk.bookrest.dto.AuthenticationRequestDto;
-import com.vspk.bookrest.dto.RegistrationDto;
+import com.vspk.bookrest.dto.AuthUserDetailsDto;
+import com.vspk.bookrest.dto.RegisterUserDetailsDto;
 import com.vspk.bookrest.payload.AuthApiError;
 import com.vspk.bookrest.payload.LoginResponse;
 import com.vspk.bookrest.payload.RegistrationResponse;
@@ -43,7 +43,7 @@ public class AuthenticationRestController {
     })
     @CrossOrigin(origins = "*")
     @PostMapping(value = "login")
-    public ResponseEntity<?> login(@RequestBody @Valid AuthenticationRequestDto requestDto) {
+    public ResponseEntity<?> login(@RequestBody @Valid AuthUserDetailsDto requestDto) {
         return userAuthService.authenticate(requestDto);
     }
 
@@ -54,7 +54,7 @@ public class AuthenticationRestController {
     })
     @CrossOrigin(origins = "*")
     @PostMapping("register")
-    public ResponseEntity<?> register(@RequestBody @Valid RegistrationDto requestDto) {
+    public ResponseEntity<?> register(@RequestBody @Valid RegisterUserDetailsDto requestDto) {
         return userAuthService.register(requestDto);
     }
 

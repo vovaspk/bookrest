@@ -3,8 +3,8 @@ package com.vspk.bookrest.service.impl;
 import com.vspk.bookrest.domain.Role;
 import com.vspk.bookrest.domain.Status;
 import com.vspk.bookrest.domain.User;
-import com.vspk.bookrest.dto.AuthenticationRequestDto;
-import com.vspk.bookrest.dto.RegistrationDto;
+import com.vspk.bookrest.dto.AuthUserDetailsDto;
+import com.vspk.bookrest.dto.RegisterUserDetailsDto;
 import com.vspk.bookrest.exception.auth.JwtAuthenticationException;
 import com.vspk.bookrest.exception.auth.UserAlreadyExistsException;
 import com.vspk.bookrest.payload.LoginResponse;
@@ -37,7 +37,7 @@ public class UserAuthServiceImpl implements UserAuthService {
     private final BCryptPasswordEncoder passwordEncoder;
 
     @Override
-    public ResponseEntity<?> authenticate(AuthenticationRequestDto requestDto) {
+    public ResponseEntity<?> authenticate(AuthUserDetailsDto requestDto) {
         try {
             String username = requestDto.getUsername();
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, requestDto.getPassword()));
@@ -52,7 +52,7 @@ public class UserAuthServiceImpl implements UserAuthService {
     }
 
     @Override
-    public ResponseEntity<?> register(RegistrationDto dto) {
+    public ResponseEntity<?> register(RegisterUserDetailsDto dto) {
         validate(dto);
 
         Role userRole = roleRepository.findByName("ROLE_USER");
@@ -76,7 +76,7 @@ public class UserAuthServiceImpl implements UserAuthService {
 
     }
 
-    private void validate(RegistrationDto dto) {
+    private void validate(RegisterUserDetailsDto dto) {
         String username = dto.getUsername();
         String email = dto.getEmail();
 

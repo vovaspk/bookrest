@@ -23,6 +23,7 @@ public class JwtUserFactory {
                 user.getEmail(),
                 user.getPassword(),
                 mapToGrantedAuthorities(new ArrayList<>(user.getRoles())),
+                //TODO when adding verified status -> user.status.equals active or verified
                 user.getStatus().equals(Status.ACTIVE),
                 user.getUpdated()
         );

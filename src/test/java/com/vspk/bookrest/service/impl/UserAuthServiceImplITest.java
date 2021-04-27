@@ -4,8 +4,8 @@ import com.vspk.bookrest.AbstractContainerITest;
 import com.vspk.bookrest.domain.Role;
 import com.vspk.bookrest.domain.Status;
 import com.vspk.bookrest.domain.User;
-import com.vspk.bookrest.dto.AuthenticationRequestDto;
-import com.vspk.bookrest.dto.RegistrationDto;
+import com.vspk.bookrest.dto.AuthUserDetailsDto;
+import com.vspk.bookrest.dto.RegisterUserDetailsDto;
 import com.vspk.bookrest.payload.LoginResponse;
 import com.vspk.bookrest.payload.RegistrationResponse;
 import com.vspk.bookrest.repository.RoleRepository;
@@ -24,7 +24,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.List;
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -79,15 +78,15 @@ class UserAuthServiceImplITest extends AbstractContainerITest {
         assertEquals(List.of(role_user), body.getRegisteredUser().getRoles());
     }
 
-    private AuthenticationRequestDto authDto(){
-        AuthenticationRequestDto dto = new AuthenticationRequestDto();
+    private AuthUserDetailsDto authDto(){
+        AuthUserDetailsDto dto = new AuthUserDetailsDto();
         dto.setUsername("testusername");
         dto.setPassword("1234");
         return dto;
     }
 
-    private RegistrationDto registerDto(){
-        RegistrationDto dto = new RegistrationDto();
+    private RegisterUserDetailsDto registerDto(){
+        RegisterUserDetailsDto dto = new RegisterUserDetailsDto();
         dto.setEmail("testemail@gmail.com");
         dto.setUsername("testusername");
         dto.setPassword("1234");

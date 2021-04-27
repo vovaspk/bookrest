@@ -6,7 +6,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
 @Data
-public class RegistrationDto {
+public class RegisterUserDetailsDto {
     @NotBlank(message = "email is mandatory")
     @Email(message = "invalid email")
     private String email;

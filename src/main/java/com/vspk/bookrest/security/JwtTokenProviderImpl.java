@@ -52,11 +52,11 @@ public class JwtTokenProviderImpl implements JwtTokenProvider {
 
     public String createToken(String username, List<Role> roles) {
 
-        Claims claims = Jwts.claims().setSubject(username);
+        var claims = Jwts.claims().setSubject(username);
         claims.put("roles", getRoleNames(roles));
 
-        Date now = new Date();
-        Date validity = new Date(now.getTime() + validityInMilliseconds);
+        var now = new Date();
+        var validity = new Date(now.getTime() + validityInMilliseconds);
 
         return Jwts.builder()
                 .setClaims(claims)
@@ -67,7 +67,7 @@ public class JwtTokenProviderImpl implements JwtTokenProvider {
     }
 
     public Authentication getAuthentication(String token) {
-        UserDetails userDetails = this.userDetailsService.loadUserByUsername(getUsername(token));
+        var userDetails = this.userDetailsService.loadUserByUsername(getUsername(token));
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
 

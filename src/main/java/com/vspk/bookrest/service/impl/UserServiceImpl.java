@@ -18,7 +18,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User save(User user){
         User savedUser = userRepository.save(user);
-        log.info("In save - user saved with userId: {}", savedUser.getId());
+        log.info("In repository - user saved with userId: {}", savedUser.getId());
         return savedUser;
     }
 

@@ -2,8 +2,8 @@ package com.vspk.bookrest.service.impl;
 
 import com.vspk.bookrest.domain.Role;
 import com.vspk.bookrest.domain.User;
-import com.vspk.bookrest.dto.AuthenticationRequestDto;
-import com.vspk.bookrest.dto.RegistrationDto;
+import com.vspk.bookrest.dto.AuthUserDetailsDto;
+import com.vspk.bookrest.dto.RegisterUserDetailsDto;
 import com.vspk.bookrest.exception.auth.JwtAuthenticationException;
 import com.vspk.bookrest.exception.auth.UserAlreadyExistsException;
 import com.vspk.bookrest.repository.RoleRepository;
@@ -89,7 +89,7 @@ class UserAuthServiceImplUTest {
 
     @Test
     void register() {
-        RegistrationDto registerDto = registerDto();
+        RegisterUserDetailsDto registerDto = registerDto();
         Role userRole = getUserRole();
 
         when(userService.findByUsername(registerDto.getUsername())).thenReturn(Optional.empty());
@@ -114,7 +114,7 @@ class UserAuthServiceImplUTest {
 
     @Test
     void registerUsernameIsAlreadyTaken() {
-        RegistrationDto registerDto = registerDto();
+        RegisterUserDetailsDto registerDto = registerDto();
 
         when(userService.findByUsername(registerDto.getUsername())).thenReturn(Optional.of(getUser()));
 
@@ -126,7 +126,7 @@ class UserAuthServiceImplUTest {
 
     @Test
     void registerEmailIsAlreadyInUse() {
-        RegistrationDto registerDto = registerDto();
+        RegisterUserDetailsDto registerDto = registerDto();
 
         when(userService.findByEmail(registerDto.getEmail())).thenReturn(Optional.of(getUser()));
 
@@ -136,8 +136,8 @@ class UserAuthServiceImplUTest {
         //assertEquals(400, registerResponse.getStatusCode().value());
     }
 
-    private RegistrationDto registerDto() {
-        RegistrationDto dto = new RegistrationDto();
+    private RegisterUserDetailsDto registerDto() {
+        RegisterUserDetailsDto dto = new RegisterUserDetailsDto();
         dto.setEmail("testemail@gmail.com");
         dto.setUsername("testusername");
         dto.setPassword("1234");
@@ -145,8 +145,8 @@ class UserAuthServiceImplUTest {
         return dto;
     }
 
-    private AuthenticationRequestDto authRequestDto() {
-        var authdto = new AuthenticationRequestDto();
+    private AuthUserDetailsDto authRequestDto() {
+        var authdto = new AuthUserDetailsDto();
         authdto.setUsername("testusername");
         authdto.setPassword("1234");
 
