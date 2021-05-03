@@ -11,6 +11,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class JwtUserFactory {
+
+    private static final List<Status> enabledStatuses = List.of(Status.ACTIVE, Status.VERIFIED);
+
     public JwtUserFactory() {
     }
 
@@ -23,9 +26,9 @@ public class JwtUserFactory {
                 user.getEmail(),
                 user.getPassword(),
                 mapToGrantedAuthorities(new ArrayList<>(user.getRoles())),
-                //TODO when adding verified status -> user.status.equals active or verified
-                user.getStatus().equals(Status.ACTIVE),
-                user.getUpdated()
+                enabledStatuses.contains(user.getStatus()),
+                user.getUpdated(),
+                user.getVerificationTimesAsked()
         );
     }
 

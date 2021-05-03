@@ -1,6 +1,7 @@
 package com.vspk.bookrest.security;
 
 import com.vspk.bookrest.exception.auth.JwtAuthenticationException;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.GenericFilterBean;
@@ -36,8 +37,10 @@ public class JwtTokenFilter extends GenericFilterBean {
             }
         } catch (JwtAuthenticationException e) {
             SecurityContextHolder.clearContext();
-            ((HttpServletResponse) res).sendError(e.getHttpStatus().value());
-            throw new JwtAuthenticationException("JWT token is expired or invalid");
+            //((HttpServletResponse) res).sendError(e.getHttpStatus().value());
+            ((HttpServletResponse) res).setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            filterChain.doFilter(req, res);
+            throw new JwtAuthenticationException("JWT token is expired or invalid", HttpStatus.UNAUTHORIZED);
         }
         filterChain.doFilter(req, res);
     }

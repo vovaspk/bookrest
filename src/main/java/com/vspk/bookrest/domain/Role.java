@@ -1,6 +1,8 @@
 package com.vspk.bookrest.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
+import lombok.ToString;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,6 +17,7 @@ import static javax.persistence.FetchType.LAZY;
 @Entity
 @Table(name = "roles")
 @Data
+@JsonIgnoreProperties(value = { "created", "updated", "users", "status" })
 public class Role extends BaseEntity{
 
     @Column(name = "name")
