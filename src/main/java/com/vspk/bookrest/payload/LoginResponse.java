@@ -14,4 +14,5 @@ public class LoginResponse {
     private final String username;
     private final String token;
     private final List<Role> roles;
+    private final String verificationStatus;
 }

@@ -6,6 +6,7 @@ import com.vspk.bookrest.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -62,6 +63,12 @@ public class UserServiceImpl implements UserService {
 
         log.info("IN findById - user: {} found by id: {}", result, id);
         return result;
+    }
+
+    @Transactional
+    @Override
+    public void incrementVerificationTimesAsked(Long userId) {
+        userRepository.incrementVerificationTimesAsked(userId);
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.vspk.bookrest.service.impl;
 
 import com.vspk.bookrest.domain.Role;
+import com.vspk.bookrest.domain.Status;
 import com.vspk.bookrest.domain.User;
 import com.vspk.bookrest.dto.AuthUserDetailsDto;
 import com.vspk.bookrest.dto.RegisterUserDetailsDto;
@@ -16,11 +17,13 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,6 +38,8 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class UserAuthServiceImplUTest {
 
+    @InjectMocks
+    private UserAuthServiceImpl authService;
     @Mock
     private AuthenticationManager authenticationManager;
     @Mock
@@ -45,12 +50,12 @@ class UserAuthServiceImplUTest {
     private RoleRepository roleRepository;
     @Mock
     private BCryptPasswordEncoder passwordEncoder;
-    @InjectMocks
-    private UserAuthServiceImpl authService;
+    @Mock
+    private ApplicationEventPublisher applicationEventPublisher;
 
     @BeforeEach
     void setUp() {
-        authService = new UserAuthServiceImpl(authenticationManager, jwtTokenProvider, userService, roleRepository, passwordEncoder);
+        authService = new UserAuthServiceImpl(authenticationManager, jwtTokenProvider, userService, roleRepository, passwordEncoder, applicationEventPublisher);
     }
 
     @AfterEach
@@ -108,6 +113,10 @@ class UserAuthServiceImplUTest {
     private Role getUserRole() {
         Role userRole = new Role();
         userRole.setName("ROLE_USER");
+        userRole.setId(1L);
+        userRole.setStatus(Status.ACTIVE);
+        userRole.setCreated(new Date());
+        userRole.setUpdated(new Date());
         userRole.setUsers(List.of(getUser()));
         return userRole;
     }
@@ -154,13 +163,19 @@ class UserAuthServiceImplUTest {
     }
 
     private User getUser() {
+        var role = new Role();
+        role.setId(1L);
+        role.setName("ROLE_USER");
+        role.setStatus(Status.ACTIVE);
+
         User user = new User();
         user.setEmail("testemail@gmail.com");
         user.setUsername("testusername");
         user.setFirstName("testusername");
         user.setLastName("testname2");
         user.setPassword("1234");
-        user.setRoles(List.of(new Role()));
+        user.setRoles(List.of(role));
+        user.setStatus(Status.ACTIVE);
         return user;
     }
 }

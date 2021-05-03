@@ -1,13 +1,17 @@
 package com.vspk.bookrest.config;
 
+import com.vspk.bookrest.exception.handler.UserAuthenticationEntrypoint;
 import com.vspk.bookrest.security.JwtConfigurer;
 import com.vspk.bookrest.security.JwtTokenProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
@@ -33,7 +37,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
                 .cors().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
+                    .and()
                 .authorizeRequests()
                 .antMatchers("/v2/api-docs").permitAll()
                 .antMatchers("/configuration/ui").permitAll()
@@ -43,10 +47,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/swagger-ui/*").permitAll()
                 .antMatchers("/webjars/**").permitAll()
                 .antMatchers("/v2/**").permitAll()
+                .antMatchers("/api/v1/auth/email-verification/**").permitAll()
                 .antMatchers(LOGIN_ENDPOINT, REGISTER_ENDPOINT, "/v2/api-docs", "/swagger-ui.html", "/v2/swagger-ui.html").permitAll()
                 .antMatchers(ADMIN_ENDPOINT).hasRole("ADMIN")
                 .anyRequest().authenticated()
-                .and()
+                    .and()
+                .exceptionHandling()
+                .authenticationEntryPoint(userAuthenticationEntrypoint())
+                    .and()
                 .apply(new JwtConfigurer(jwtTokenProvider));
+    }
+
+    @Bean
+    public UserAuthenticationEntrypoint userAuthenticationEntrypoint(){
+        return new UserAuthenticationEntrypoint();
     }
 }

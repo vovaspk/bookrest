@@ -105,6 +105,7 @@ class UserAuthServiceImplITest extends AbstractContainerITest {
         user.setPassword(passwordEncoder.encode("1234"));
         user.setRoles(List.of(role_user));
         user.setStatus(Status.ACTIVE);
+        user.setVerificationTimesAsked(1);
         return user;
     }
 

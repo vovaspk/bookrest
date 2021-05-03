@@ -16,6 +16,8 @@ public interface UserService {
 
     Optional<User> findById(Long id);
 
+    void incrementVerificationTimesAsked(Long userId);
+
     void delete(Long id);
 
     //for tests purposes only

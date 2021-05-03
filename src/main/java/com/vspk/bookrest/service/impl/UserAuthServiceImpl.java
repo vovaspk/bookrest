@@ -5,6 +5,7 @@ import com.vspk.bookrest.domain.Status;
 import com.vspk.bookrest.domain.User;
 import com.vspk.bookrest.dto.AuthUserDetailsDto;
 import com.vspk.bookrest.dto.RegisterUserDetailsDto;
+import com.vspk.bookrest.event.SendingEmailConfirmationEvent;
 import com.vspk.bookrest.exception.auth.JwtAuthenticationException;
 import com.vspk.bookrest.exception.auth.UserAlreadyExistsException;
 import com.vspk.bookrest.payload.LoginResponse;
@@ -15,6 +16,7 @@ import com.vspk.bookrest.service.UserAuthService;
 import com.vspk.bookrest.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -35,6 +37,7 @@ public class UserAuthServiceImpl implements UserAuthService {
     private final UserService userService;
     private final RoleRepository roleRepository;
     private final BCryptPasswordEncoder passwordEncoder;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
     @Override
     public ResponseEntity<?> authenticate(AuthUserDetailsDto requestDto) {
@@ -45,7 +48,7 @@ public class UserAuthServiceImpl implements UserAuthService {
 
             String token = jwtTokenProvider.createToken(username, user.getRoles());
 
-            return ResponseEntity.ok().body(new LoginResponse(username, token, user.getRoles()));
+            return ResponseEntity.ok().body(new LoginResponse(username, token, user.getRoles(),user.getStatus().toString() ));
         } catch (AuthenticationException e) {
             throw new JwtAuthenticationException("Invalid username or password", HttpStatus.UNAUTHORIZED);
         }
@@ -55,7 +58,7 @@ public class UserAuthServiceImpl implements UserAuthService {
     public ResponseEntity<?> register(RegisterUserDetailsDto dto) {
         validate(dto);
 
-        Role userRole = roleRepository.findByName("ROLE_USER");
+        var userRole = roleRepository.findByName("ROLE_USER");
         List<Role> userRoles = new ArrayList<>();
         userRoles.add(userRole);
 
@@ -65,17 +68,19 @@ public class UserAuthServiceImpl implements UserAuthService {
         newUser.setPassword(passwordEncoder.encode(dto.getPassword()));
         newUser.setRoles(userRoles);
         newUser.setStatus(Status.ACTIVE);
+        newUser.setVerificationTimesAsked(1);
 
         var registeredUser = userService.save(newUser);
 
         log.info("user successfully registered: {} ", registeredUser);
+        applicationEventPublisher.publishEvent(new SendingEmailConfirmationEvent(registeredUser));
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(new RegistrationResponse(registeredUser));
 
     }
-
+//BasicValidator<T> , then create validator with class that's need to be validated with custom validation, if validation grows up ..
     private void validate(RegisterUserDetailsDto dto) {
         String username = dto.getUsername();
         String email = dto.getEmail();
