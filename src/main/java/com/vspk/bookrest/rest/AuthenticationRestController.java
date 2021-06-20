@@ -42,41 +42,26 @@ public class AuthenticationRestController {
     private final UserVerificationService userVerificationService;
 
 //TODO make functional tests
-    @ApiOperation(value = "login",response = LoginResponse.class)
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Successfully logged in system", response = LoginResponse.class),
-            @ApiResponse(code = 401, message = "username or password is wrong, authorization failed", response = AuthApiError.class)
-    })
-    @CrossOrigin(origins = "*")
     @PostMapping(value = "login")
     public ResponseEntity<?> login(@RequestBody @Valid AuthUserDetailsDto requestDto) {
         return userAuthService.authenticate(requestDto);
     }
 
-    @ApiOperation(value = "registration",response = RegistrationResponse.class)
-    @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "Successfully registered user", response = RegistrationResponse.class),
-            @ApiResponse(code = 401, message = "failed to register user, check username and email on uniqueness", response = AuthApiError.class)
-    })
-    @CrossOrigin(origins = "*")
     @PostMapping("register")
     public ResponseEntity<?> register(@RequestBody @Valid RegisterUserDetailsDto requestDto) {
         return userAuthService.register(requestDto);
     }
 
-    @CrossOrigin(origins = "*")
-    @PostMapping("test")
+    @GetMapping("test")
     public ResponseEntity<?> test() {
         return ResponseEntity.status(HttpStatus.OK).body(new TestDto("test response", Date.from(Instant.now())));
     }
 
-    @CrossOrigin(origins = "*")
     @GetMapping("email-verification/{token}/verify")
     public String verifyAccount(@PathVariable String token){
         return userVerificationService.confirmAccount(token);
     }
 
-    @CrossOrigin(origins = "*")
     @PostMapping("email-verification/resend")
     public ResponseEntity<?> reSendVerificationToken(@RequestParam String email){
         // add user a choice to confirm with phone or email
