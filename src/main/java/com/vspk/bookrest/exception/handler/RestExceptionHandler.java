@@ -1,5 +1,6 @@
 package com.vspk.bookrest.exception.handler;
 
+import com.vspk.bookrest.exception.UserAlreadyVerifiedException;
 import com.vspk.bookrest.exception.UserVerificationException;
 import com.vspk.bookrest.exception.auth.JwtAuthenticationException;
 import com.vspk.bookrest.exception.auth.UserAlreadyExistsException;
@@ -40,6 +41,13 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(value = UserVerificationException.class)
     protected ResponseEntity<Object> verificationException(UserVerificationException ex){
+        var authApiError = new AuthApiError(ex.getMessage());
+        return buildResponseEntity(authApiError, HttpStatus.BAD_REQUEST);
+
+    }
+
+    @ExceptionHandler(value = UserAlreadyVerifiedException.class)
+    protected ResponseEntity<Object> userAlreadyExists(UserAlreadyVerifiedException ex){
         var authApiError = new AuthApiError(ex.getMessage());
         return buildResponseEntity(authApiError, HttpStatus.BAD_REQUEST);
 

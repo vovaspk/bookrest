@@ -9,6 +9,11 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.Arrays;
 
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
@@ -32,6 +37,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .httpBasic().disable()
                 .csrf().disable()
+                .cors().and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                     .and()
                 .authorizeRequests()
@@ -52,6 +58,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authenticationEntryPoint(userAuthenticationEntrypoint())
                     .and()
                 .apply(new JwtConfigurer(jwtTokenProvider));
+    }
+
+    @Bean
+    CorsConfigurationSource corsConfigurationSource()    {
+        CorsConfiguration configuration = new CorsConfiguration();
+        //configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000"));//localhost:3000 working, try with *
+        configuration.setAllowedOrigins(Arrays.asList("*"));//working as well
+        configuration.setAllowedMethods(Arrays.asList("GET","POST", "OPTIONS", "DELETE"));
+        configuration.setAllowedHeaders(Arrays.asList("Access-Control-Allow-Origin", "Content-Type", "Authorization"));
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
     }
 
     @Bean

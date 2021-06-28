@@ -33,6 +33,9 @@ public class JwtTokenFilter extends GenericFilterBean {
 
                 if (authentication != null) {
                     SecurityContextHolder.getContext().setAuthentication(authentication);
+                    ((HttpServletResponse) res).setHeader("Access-Control-Allow-Origin", "*");
+                    ((HttpServletResponse) res).setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, HEAD, OPTIONS, DELETE");
+                    ((HttpServletResponse) res).setHeader("Access-Control-Max-Age", "3600");
                 }
             }
         } catch (JwtAuthenticationException e) {

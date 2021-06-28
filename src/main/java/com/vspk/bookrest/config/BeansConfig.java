@@ -7,9 +7,11 @@ import com.vspk.bookrest.repository.RoleRepository;
 import com.vspk.bookrest.repository.UserRepository;
 import com.vspk.bookrest.repository.VerificationRepository;
 import com.vspk.bookrest.security.JwtTokenProvider;
+import com.vspk.bookrest.service.AdminUserService;
 import com.vspk.bookrest.service.UserAuthService;
 import com.vspk.bookrest.service.UserService;
 import com.vspk.bookrest.service.UserVerificationService;
+import com.vspk.bookrest.service.impl.AdminUserServiceImpl;
 import com.vspk.bookrest.service.impl.UserAuthServiceImpl;
 import com.vspk.bookrest.service.impl.UserServiceImpl;
 import com.vspk.bookrest.service.impl.UserVerificationServiceImpl;
@@ -53,6 +55,11 @@ public class BeansConfig {
             VerificationRepository verificationRepository,
             UserService userService){
         return new UserRegisteredEventListener(emailService, verificationRepository, userService);
+    }
+
+    @Bean
+    public AdminUserService adminUserService(VerificationRepository verificationRepository, UserService userService){
+        return new AdminUserServiceImpl(verificationRepository, userService);
     }
 
 }

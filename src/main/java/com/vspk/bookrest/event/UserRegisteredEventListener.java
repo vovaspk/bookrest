@@ -128,7 +128,7 @@ public class UserRegisteredEventListener implements ApplicationListener<SendingE
                 """.formatted(verificationLink);
         verificationRepository.save(verification);
         userService.incrementVerificationTimesAsked(registeredUser.getId());
-        emailService.send(registeredUser.getEmail(), "BookRest Account Verification", message/*verificationLink.formatted(secretToken)*/);
+        emailService.send(registeredUser.getEmail(), "BookRest Account Verification", message);
 
     }
 
