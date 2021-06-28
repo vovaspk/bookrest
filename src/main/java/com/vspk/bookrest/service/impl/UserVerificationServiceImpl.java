@@ -1,6 +1,7 @@
 package com.vspk.bookrest.service.impl;
 
 import com.vspk.bookrest.domain.Status;
+import com.vspk.bookrest.domain.Verification;
 import com.vspk.bookrest.event.SendingEmailConfirmationEvent;
 import com.vspk.bookrest.exception.UserVerificationException;
 import com.vspk.bookrest.repository.VerificationRepository;
@@ -12,6 +13,7 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 
@@ -22,6 +24,7 @@ public class UserVerificationServiceImpl implements UserVerificationService {
     private final UserService userService;
     private final ApplicationEventPublisher applicationEventPublisher;
 
+    @Transactional
     @Override
     public String confirmAccount(String code) {
         var userVerification = verificationRepository.findVerificationByCode(code).orElseThrow(() -> new UserVerificationException("Invalid verification link"));
@@ -43,11 +46,11 @@ public class UserVerificationServiceImpl implements UserVerificationService {
         return "Thank you! Your account has been verified";
     }
 
-    private boolean verificationLinkIsExpired(com.vspk.bookrest.domain.Verification userVerification) {
+    private boolean verificationLinkIsExpired(Verification userVerification) {
         return userVerification.getExpires_at().before(new Date());
     }
 
-    private boolean accountAlreadyVerified(com.vspk.bookrest.domain.Verification userVerification, com.vspk.bookrest.domain.User user) {
+    private boolean accountAlreadyVerified(Verification userVerification, com.vspk.bookrest.domain.User user) {
         return userVerification.getConfirmed_at() != null || user.isVerified();
     }
 
