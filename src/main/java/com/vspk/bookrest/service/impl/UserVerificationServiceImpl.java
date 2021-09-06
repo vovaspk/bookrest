@@ -1,5 +1,6 @@
 package com.vspk.bookrest.service.impl;
 
+import com.google.common.primitives.Ints;
 import com.vspk.bookrest.domain.Status;
 import com.vspk.bookrest.domain.Verification;
 import com.vspk.bookrest.event.SendingEmailConfirmationEvent;
@@ -29,14 +30,7 @@ public class UserVerificationServiceImpl implements UserVerificationService {
     public String confirmAccount(String code) {
         var userVerification = verificationRepository.findVerificationByCode(code).orElseThrow(() -> new UserVerificationException("Invalid verification link"));
         var user = userVerification.getUser();
-        if(accountAlreadyVerified(userVerification, user)){
-            throw new UserVerificationException("Account is already Verified!");
-        }
-
-        if(verificationLinkIsExpired(userVerification)){
-            throw new UserVerificationException("Confirmation Link is expired!");
-        }
-
+        validateUserAccount(userVerification, user);
         userVerification.setConfirmed_at(new Date());
 
         user.setStatus(Status.VERIFIED);
@@ -44,6 +38,16 @@ public class UserVerificationServiceImpl implements UserVerificationService {
 
         log.info("User with Id " + userVerification.getUser().getId() + " has been successfully verified");
         return "Thank you! Your account has been verified";
+    }
+
+    private void validateUserAccount(Verification userVerification, com.vspk.bookrest.domain.User user) {
+        if(accountAlreadyVerified(userVerification, user)){
+            throw new UserVerificationException("Account is already Verified!");
+        }
+
+        if(verificationLinkIsExpired(userVerification)){
+            throw new UserVerificationException("Confirmation Link is expired!");
+        }
     }
 
     private boolean verificationLinkIsExpired(Verification userVerification) {
