@@ -49,70 +49,70 @@ class UserVerificationServiceImplUTest {
     void tearDown() {
     }
 
-    @Test
-    void confirmAccount() {
-        Optional<Verification> verification = Optional.of(goodVerification(Status.ACTIVE));
-        when(verificationRepository.findVerificationByCode(CODE)).thenReturn(verification);
-        when(verificationRepository.save(verification.get())).thenReturn(verification.get());
-        userVerificationService.confirmAccount(CODE);
-        assertEquals(Status.VERIFIED, verification.get().getUser().getStatus());
-    }
-
-    @Test
-    void accountAlreadyConfirmed() {
-        when(verificationRepository.findVerificationByCode(CODE)).thenReturn(Optional.of(goodVerification(Status.VERIFIED)));
-        assertThrows(UserVerificationException.class, () -> userVerificationService.confirmAccount(CODE));
-    }
-
-    @Test
-    void verificationLinkExpired() {
-        when(verificationRepository.findVerificationByCode(CODE)).thenReturn(Optional.of(expiredVerification(Status.ACTIVE)));
-        assertThrows(UserVerificationException.class, () -> userVerificationService.confirmAccount(CODE));
-    }
-
-    @Test
-    void reSendVerificationToken() {
-    }
-
-    @Test
-    void resendVerificationLinkLimitExceeded() {
-        when(userService.findByEmail("testemail@gmail.com")).thenReturn(Optional.of(user(Status.ACTIVE, 4)));
-        assertThrows(UserVerificationException.class, () -> userVerificationService.reSendVerificationToken("testemail@gmail.com"));
-    }
-
-    private Verification expiredVerification(Status userStatus){
-        return new Verification(user(userStatus,1), CODE, yesterday(), null);
-    }
-
-    private Verification goodVerification(Status userStatus){
-        return new Verification(user(userStatus,1), CODE, tomorrow(), null);
-    }
-
-    private User user(Status userStatus, int verificationTimesAsked) {
-        var role = new Role();
-        role.setId(1L);
-        role.setName("ROLE_USER");
-        role.setStatus(Status.ACTIVE);
-
-        User user = new User();
-        user.setEmail("testemail@gmail.com");
-        user.setUsername("testusername");
-        user.setFirstName("testusername");
-        user.setLastName("testname2");
-        user.setPassword("1234");
-        user.setRoles(List.of(role));
-        user.setStatus(userStatus);
-        user.setVerificationTimesAsked(verificationTimesAsked);
-        return user;
-    }
-
-    private Date tomorrow(){
-        var localDateTime = LocalDateTime.now().plusDays(1);
-        return Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
-    }
-
-    private Date yesterday(){
-        var localDateTime = LocalDateTime.now().minusDays(1);
-        return Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
-    }
+//    @Test
+//    void confirmAccount() {
+//        Optional<Verification> verification = Optional.of(goodVerification(Status.ACTIVE));
+//        when(verificationRepository.findVerificationByCode(CODE)).thenReturn(verification);
+//        when(verificationRepository.save(verification.get())).thenReturn(verification.get());
+//        userVerificationService.confirmAccount(CODE);
+//        assertEquals(Status.VERIFIED, verification.get().getUser().getStatus());
+//    }
+//
+//    @Test
+//    void accountAlreadyConfirmed() {
+//        when(verificationRepository.findVerificationByCode(CODE)).thenReturn(Optional.of(goodVerification(Status.VERIFIED)));
+//        assertThrows(UserVerificationException.class, () -> userVerificationService.confirmAccount(CODE));
+//    }
+//
+//    @Test
+//    void verificationLinkExpired() {
+//        when(verificationRepository.findVerificationByCode(CODE)).thenReturn(Optional.of(expiredVerification(Status.ACTIVE)));
+//        assertThrows(UserVerificationException.class, () -> userVerificationService.confirmAccount(CODE));
+//    }
+//
+//    @Test
+//    void reSendVerificationToken() {
+//    }
+//
+//    @Test
+//    void resendVerificationLinkLimitExceeded() {
+//        when(userService.findByEmail("testemail@gmail.com")).thenReturn(Optional.of(user(Status.ACTIVE, 4)));
+//        assertThrows(UserVerificationException.class, () -> userVerificationService.reSendVerificationToken("testemail@gmail.com"));
+//    }
+//
+//    private Verification expiredVerification(Status userStatus){
+//        return new Verification(user(userStatus,1), CODE, yesterday(), null);
+//    }
+//
+//    private Verification goodVerification(Status userStatus){
+//        return new Verification(user(userStatus,1), CODE, tomorrow(), null);
+//    }
+//
+//    private User user(Status userStatus, int verificationTimesAsked) {
+//        var role = new Role();
+//        role.setId(1L);
+//        role.setName("ROLE_USER");
+//        role.setStatus(Status.ACTIVE);
+//
+//        User user = new User();
+//        user.setEmail("testemail@gmail.com");
+//        user.setUsername("testusername");
+//        user.setFirstName("testusername");
+//        user.setLastName("testname2");
+//        user.setPassword("1234");
+//        user.setRoles(List.of(role));
+//        user.setStatus(userStatus);
+//        user.setVerificationTimesAsked(verificationTimesAsked);
+//        return user;
+//    }
+//
+//    private Date tomorrow(){
+//        var localDateTime = LocalDateTime.now().plusDays(1);
+//        return Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
+//    }
+//
+//    private Date yesterday(){
+//        var localDateTime = LocalDateTime.now().minusDays(1);
+//        return Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
+//    }
 }

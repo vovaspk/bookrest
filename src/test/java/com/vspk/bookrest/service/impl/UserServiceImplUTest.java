@@ -43,97 +43,97 @@ class UserServiceImplUTest {
     void tearDown() {
     }
 
-    @Test
-    void getAll() {
-        when(userRepository.findAll()).thenReturn(List.of(getUser(), getUser(), getUser()));
+//    @Test
+//    void getAll() {
+//        when(userRepository.findAll()).thenReturn(List.of(getUser(), getUser(), getUser()));
+//
+//        List<User> all = userService.getAll();
+//
+//        assertNotNull(all);
+//        assertFalse(all.isEmpty());
+//        assertEquals(3, all.size());
+//
+//    }
+//
+//    @Test
+//    void findByUsername() {
+//        when(userRepository.findByUsername("testUsername")).thenReturn(of(getUser()));
+//
+//        Optional<User> foundUser = userService.findByUsername("testUsername");
+//
+//        assertTrue(foundUser.isPresent());
+//    }
+//
+//    @Test
+//    void findByUsernameNotFound() {
+//        when(userRepository.findByUsername("testUsername")).thenReturn(Optional.empty());
+//
+//        Optional<User> foundUser = userService.findByUsername("testUsername");
+//
+//        assertTrue(foundUser.isEmpty());
+//    }
+//
+//    @Test
+//    void findById() {
+//        when(userRepository.findById(132L)).thenReturn(of(getUser()));
+//
+//        Optional<User> foundUser = userService.findById(132L);
+//
+//        assertTrue(foundUser.isPresent());
+//    }
+//
+//    @Test
+//    void findByIdNotFound() {
+//        when(userRepository.findById(132L)).thenReturn(Optional.empty());
+//
+//        Optional<User> foundUser = userService.findById(132L);
+//
+//        assertTrue(foundUser.isEmpty());
+//    }
+//
+//    @Test
+//    void delete() {
+//        Long testId = 142L;
+//        userService.delete(testId);
+//        verify(userRepository, times(1)).deleteById(testId);
+//    }
+//
+//    @Test
+//    void save() {
+//        when(userRepository.save(getUser())).thenReturn(getUser());
+//
+//        User savedUser = userService.save(getUser());
+//
+//        assertNotNull(savedUser);
+//        assertEquals("testUsername", savedUser.getUsername());
+//    }
+//
+//    @Test
+//    void findByEmail() {
+//        when(userRepository.findUserByEmail("testemail@gmail.com")).thenReturn(of(getUser()));
+//
+//        Optional<User> foundUser = userService.findByEmail("testemail@gmail.com");
+//
+//        assertTrue(foundUser.isPresent());
+//    }
+//
+//    @Test
+//    void findByEmailNotFound() {
+//        when(userRepository.findUserByEmail("testemail@gmail.com")).thenReturn(Optional.empty());
+//
+//        Optional<User> foundUser = userService.findByEmail("testemail@gmail.com");
+//
+//        assertTrue(foundUser.isEmpty());
+//    }
 
-        List<User> all = userService.getAll();
-
-        assertNotNull(all);
-        assertFalse(all.isEmpty());
-        assertEquals(3, all.size());
-
-    }
-
-    @Test
-    void findByUsername() {
-        when(userRepository.findByUsername("testUsername")).thenReturn(of(getUser()));
-
-        Optional<User> foundUser = userService.findByUsername("testUsername");
-
-        assertTrue(foundUser.isPresent());
-    }
-
-    @Test
-    void findByUsernameNotFound() {
-        when(userRepository.findByUsername("testUsername")).thenReturn(Optional.empty());
-
-        Optional<User> foundUser = userService.findByUsername("testUsername");
-
-        assertTrue(foundUser.isEmpty());
-    }
-
-    @Test
-    void findById() {
-        when(userRepository.findById(132L)).thenReturn(of(getUser()));
-
-        Optional<User> foundUser = userService.findById(132L);
-
-        assertTrue(foundUser.isPresent());
-    }
-
-    @Test
-    void findByIdNotFound() {
-        when(userRepository.findById(132L)).thenReturn(Optional.empty());
-
-        Optional<User> foundUser = userService.findById(132L);
-
-        assertTrue(foundUser.isEmpty());
-    }
-
-    @Test
-    void delete() {
-        Long testId = 142L;
-        userService.delete(testId);
-        verify(userRepository, times(1)).deleteById(testId);
-    }
-
-    @Test
-    void save() {
-        when(userRepository.save(getUser())).thenReturn(getUser());
-
-        User savedUser = userService.save(getUser());
-
-        assertNotNull(savedUser);
-        assertEquals("testUsername", savedUser.getUsername());
-    }
-
-    @Test
-    void findByEmail() {
-        when(userRepository.findUserByEmail("testemail@gmail.com")).thenReturn(of(getUser()));
-
-        Optional<User> foundUser = userService.findByEmail("testemail@gmail.com");
-
-        assertTrue(foundUser.isPresent());
-    }
-
-    @Test
-    void findByEmailNotFound() {
-        when(userRepository.findUserByEmail("testemail@gmail.com")).thenReturn(Optional.empty());
-
-        Optional<User> foundUser = userService.findByEmail("testemail@gmail.com");
-
-        assertTrue(foundUser.isEmpty());
-    }
-
-    private User getUser() {
-        User user = new User();
-        user.setEmail("testemail@gmail.com");
-        user.setUsername("testUsername");
-        user.setFirstName("testname");
-        user.setLastName("testname2");
-        user.setPassword("1234");
-        user.setRoles(List.of(new Role()));
-        return user;
-    }
+//    private User getUser() {
+//        User user = new User();
+//        user.setEmail("testemail@gmail.com");
+//        user.setUsername("testUsername");
+//        user.setFirstName("testname");
+//        user.setLastName("testname2");
+//        user.setPassword("1234");
+//        user.setRoles(List.of(new Role()));
+//        return user;
+//    }
 }
