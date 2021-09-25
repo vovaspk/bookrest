@@ -40,6 +40,14 @@ class User(
     )
     val roles: List<Role>,
 
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+        name = "liked_restaurants",
+        joinColumns = [JoinColumn(name = "user_id", referencedColumnName = "id")],
+        inverseJoinColumns = [JoinColumn(name = "rest_id", referencedColumnName = "id")]
+    )
+    val likedRestaurants: List<Restaurant>,//is empty at start
+
     @Column(name = "verification_asked_times")
     var verificationTimesAsked: Int,
 

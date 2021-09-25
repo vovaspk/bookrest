@@ -26,7 +26,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 
 @Slf4j
-
 class UserAuthServiceImpl(
     private val authenticationManager: AuthenticationManager,
     private val jwtTokenProvider: JwtTokenProvider,
@@ -62,13 +61,15 @@ class UserAuthServiceImpl(
         val userRole = roleRepository.findByName("ROLE_USER")
         val userRoles: MutableList<Role> = ArrayList()
         userRoles.add(userRole)
-        val newUser = User(username = dto.username,
+        val newUser = User(
+            username = dto.username,
             email = dto.email,
             password = passwordEncoder.encode(dto.password),
             roles = userRoles,
             firstName = null,
             lastName = null,
-            verificationTimesAsked = 1)
+            verificationTimesAsked = 1,
+        likedRestaurants = emptyList())
         newUser.status = Status.ACTIVE
         val registeredUser = userService.save(newUser)
         log.info("user successfully registered: {} ", registeredUser)

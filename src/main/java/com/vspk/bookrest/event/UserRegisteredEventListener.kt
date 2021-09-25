@@ -31,7 +31,7 @@ open class UserRegisteredEventListener(
 
         verificationRepository.save(verification)
         userService.incrementVerificationTimesAsked(registeredUser.id!!)
-        //emailService.send(registeredUser.email, "BookRest Account Verification", message)
+        emailService.send(registeredUser.email, "BookRest Account Verification", message)
 
     }
 

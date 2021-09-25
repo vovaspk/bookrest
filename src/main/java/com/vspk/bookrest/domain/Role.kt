@@ -12,12 +12,14 @@ import lombok.Data
 @Entity
 @Table(name = "roles")
 @JsonIgnoreProperties(value = ["created", "updated", "users", "status"])
-class Role( @Column(name = "name")
-            val name: String? = null,
+class Role(
+    @Column(name = "name")
+    val name: String? = null,
 
     @Transient
-@ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY)
-val users: List<User>? = null) : BaseEntity() {
+    @ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY)
+    val users: List<User>? = null
+) : BaseEntity() {
 
 //    @Column(name = "name")
 //    val name: String? = null

@@ -53,5 +53,5 @@ class AuthenticationRestController (
         return userVerificationService.reSendVerificationToken(email)
     }
 
-    internal data class TestDto (val response: String?,val date: Date?)
+    internal data class TestDto (val response: String?, val date: Date?)
 }

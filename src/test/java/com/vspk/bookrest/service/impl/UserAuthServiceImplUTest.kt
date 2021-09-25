@@ -169,6 +169,7 @@ internal class UserAuthServiceImplUTest {
             "testemail@gmail.com",
             "1234",
             listOf(role),
+            emptyList(),
             0
         )
         user.status = Status.ACTIVE

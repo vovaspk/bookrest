@@ -4,4 +4,6 @@
                         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
     <include file="classpath:db/changelog/db.changelog1.xml"/>
     <include file="classpath:db/changelog/db.add_user_verification.xml"/>
+    <include file="classpath:db/changelog/db.add_restaurant_and_liked_and_photos_tables.xml"/>
+    <include file="classpath:db/changelog/db.add_review_tag_tables.xml"/>
 </databaseChangeLog>

@@ -1,0 +1,193 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="1" author="volodymyr.slipchyk">
+        <createTable tableName="restaurant">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(30)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="email" type="VARCHAR(75)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="phone" type="VARCHAR(15)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="thumbnail_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="schedule_id" type="BIGINT">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="rating" type="NUMERIC(1,1)">
+                <constraints nullable="false"/>
+            </column>
+<!--            addressId to another table or multiple fields in restaurant table-->
+            <column name="address" type="VARCHAR">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="description" type="VARCHAR(100)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="cuisine_type" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="website" type="VARCHAR(75)">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="2" author="volodymyr.slipchyk">
+        <createTable tableName="liked_restaurants">
+            <column name="user_id" type="BIGINT" autoIncrement="true">
+                <constraints unique="true" nullable="false"/>
+            </column>
+            <column name="rest_id" type="BIGINT" autoIncrement="true">
+                <constraints unique="true" nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+<!--    SCHEDULE-->
+    <changeSet id="3" author="volodymyr.slipchyk">
+        <createTable tableName="schedule">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="rest_id" type="BIGINT">
+                <constraints nullable="false" unique="true"/>
+            </column>
+
+            <column name="monday" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="tuesday" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="wednesday" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="thursday" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="friday" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="saturday" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="sunday" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="4" author="volodymyr.slipchyk">
+        <addForeignKeyConstraint baseColumnNames="rest_id"
+                                 baseTableName="schedule"
+                                 constraintName="fk_schedule_rest"
+                                 onDelete="CASCADE"
+                                 referencedColumnNames="id"
+                                 referencedTableName="restaurant"/>
+    </changeSet>
+<!--    SCHEDULE-->
+
+<!--PHOTOS-->
+    <changeSet id="5" author="volodymyr.slipchyk">
+        <createTable tableName="rest_thumbnails">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="rest_id" type="BIGINT">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="path" type="VARCHAR(50)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </createTable>
+        <createTable tableName="rest_photos">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="rest_id" type="BIGINT">
+                <constraints nullable="false" unique="false"/>
+            </column>
+            <column name="path" type="VARCHAR(50)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="profile_photos">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="path" type="VARCHAR(50)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="6" author="volodymyr.slipchyk">
+        <addForeignKeyConstraint baseColumnNames="thumbnail_id"
+                                 baseTableName="restaurant"
+                                 constraintName="fk_rest_thumb"
+                                 onDelete="CASCADE"
+                                 referencedColumnNames="rest_id"
+                                 referencedTableName="rest_thumbnails"/>
+        <addForeignKeyConstraint baseColumnNames="schedule_id"
+                                 baseTableName="restaurant"
+                                 constraintName="fk_rest_schedule"
+                                 onDelete="CASCADE"
+                                 referencedColumnNames="rest_id"
+                                 referencedTableName="schedule"/>
+        <addForeignKeyConstraint baseColumnNames="user_id"
+                                 baseTableName="liked_restaurants"
+                                 constraintName="fk_liked_user_rest"
+                                 onDelete="CASCADE"
+                                 referencedColumnNames="id"
+                                 referencedTableName="users"/>
+        <addForeignKeyConstraint baseColumnNames="rest_id"
+                                 baseTableName="liked_restaurants"
+                                 constraintName="fk_liked_rest_user"
+                                 onDelete="CASCADE"
+                                 referencedColumnNames="id"
+                                 referencedTableName="restaurant"/>
+    </changeSet>
+<!--    PHOTOS-->
+    <changeSet id="7" author="volodymyr.slipchyk">
+        <addForeignKeyConstraint baseColumnNames="rest_id"
+                                 baseTableName="rest_thumbnails"
+                                 constraintName="fk_rest_thumb"
+                                 onDelete="CASCADE"
+                                 referencedColumnNames="id"
+                                 referencedTableName="restaurant"/>
+
+        <addForeignKeyConstraint baseColumnNames="rest_id"
+                                 baseTableName="rest_photos"
+                                 constraintName="fk_rest_photos_rest"
+                                 onDelete="CASCADE"
+                                 referencedColumnNames="id"
+                                 referencedTableName="restaurant"/>
+
+        <addForeignKeyConstraint baseColumnNames="user_id"
+                                 baseTableName="profile_photos"
+                                 constraintName="fk_profile_photos_user"
+                                 onDelete="CASCADE"
+                                 referencedColumnNames="id"
+                                 referencedTableName="users"/>
+    </changeSet>
+</databaseChangeLog>
