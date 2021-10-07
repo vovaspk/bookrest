@@ -23,7 +23,7 @@
             <column name="schedule_id" type="BIGINT">
                 <constraints nullable="false" unique="true"/>
             </column>
-            <column name="rating" type="NUMERIC(1,1)">
+            <column name="rating" type="NUMERIC(2,1)">
                 <constraints nullable="false"/>
             </column>
 <!--            addressId to another table or multiple fields in restaurant table-->
@@ -59,9 +59,9 @@
                 <constraints primaryKey="true" nullable="false"/>
             </column>
 
-            <column name="rest_id" type="BIGINT">
-                <constraints nullable="false" unique="true"/>
-            </column>
+<!--            <column name="rest_id" type="BIGINT">-->
+<!--                <constraints nullable="false" unique="true"/>-->
+<!--            </column>-->
 
             <column name="monday" type="VARCHAR(20)">
                 <constraints nullable="false"/>
@@ -93,14 +93,14 @@
         </createTable>
     </changeSet>
 
-    <changeSet id="4" author="volodymyr.slipchyk">
-        <addForeignKeyConstraint baseColumnNames="rest_id"
-                                 baseTableName="schedule"
-                                 constraintName="fk_schedule_rest"
-                                 onDelete="CASCADE"
-                                 referencedColumnNames="id"
-                                 referencedTableName="restaurant"/>
-    </changeSet>
+<!--    <changeSet id="4" author="volodymyr.slipchyk">-->
+<!--        <addForeignKeyConstraint baseColumnNames="rest_id"-->
+<!--                                 baseTableName="schedule"-->
+<!--                                 constraintName="fk_schedule_rest"-->
+<!--                                 onDelete="CASCADE"-->
+<!--                                 referencedColumnNames="id"-->
+<!--                                 referencedTableName="restaurant"/>-->
+<!--    </changeSet>-->
 <!--    SCHEDULE-->
 
 <!--PHOTOS-->
@@ -109,9 +109,9 @@
             <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="rest_id" type="BIGINT">
-                <constraints nullable="false" unique="true"/>
-            </column>
+<!--            <column name="rest_id" type="BIGINT">-->
+<!--                <constraints nullable="false" unique="true"/>-->
+<!--            </column>-->
             <column name="path" type="VARCHAR(50)">
                 <constraints nullable="false" unique="true"/>
             </column>
@@ -146,13 +146,13 @@
                                  baseTableName="restaurant"
                                  constraintName="fk_rest_thumb"
                                  onDelete="CASCADE"
-                                 referencedColumnNames="rest_id"
+                                 referencedColumnNames="id"
                                  referencedTableName="rest_thumbnails"/>
         <addForeignKeyConstraint baseColumnNames="schedule_id"
                                  baseTableName="restaurant"
                                  constraintName="fk_rest_schedule"
                                  onDelete="CASCADE"
-                                 referencedColumnNames="rest_id"
+                                 referencedColumnNames="id"
                                  referencedTableName="schedule"/>
         <addForeignKeyConstraint baseColumnNames="user_id"
                                  baseTableName="liked_restaurants"
@@ -169,12 +169,12 @@
     </changeSet>
 <!--    PHOTOS-->
     <changeSet id="7" author="volodymyr.slipchyk">
-        <addForeignKeyConstraint baseColumnNames="rest_id"
-                                 baseTableName="rest_thumbnails"
-                                 constraintName="fk_rest_thumb"
-                                 onDelete="CASCADE"
-                                 referencedColumnNames="id"
-                                 referencedTableName="restaurant"/>
+<!--        <addForeignKeyConstraint baseColumnNames="rest_id"-->
+<!--                                 baseTableName="rest_thumbnails"-->
+<!--                                 constraintName="fk_rest_thumb"-->
+<!--                                 onDelete="CASCADE"-->
+<!--                                 referencedColumnNames="id"-->
+<!--                                 referencedTableName="restaurant"/>-->
 
         <addForeignKeyConstraint baseColumnNames="rest_id"
                                  baseTableName="rest_photos"

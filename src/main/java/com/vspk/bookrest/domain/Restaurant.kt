@@ -38,14 +38,14 @@ class Restaurant(
     @JoinColumn(name = "schedule_id", referencedColumnName = "id")
     val schedule: Schedule,
     @OneToMany(mappedBy = "restaurant")
-    val reviews: List<Review>,
+    var reviews: List<Review>? = null,
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
         name = "rest_tags",
         joinColumns = [JoinColumn(name = "rest_id", referencedColumnName = "id")],
         inverseJoinColumns = [JoinColumn(name = "tag_id", referencedColumnName = "id")]
     )
-    val tags: List<Tag>,
+    var tags: List<Tag>? = null,
     @OneToMany(mappedBy = "restaurant")
     val photos: List<RestPhoto>
 //TODO add in future pagination and sorting?

@@ -8,8 +8,8 @@ import javax.persistence.Table
 @Entity
 @Table(name = "rest_thumbnails")
 class RestaurantThumbnail(
-    @OneToOne(mappedBy = "thumbnail")
-    val restaurant: Restaurant,
+//    @OneToOne(mappedBy = "thumbnail")
+//    val restaurant: Restaurant,
     @Column(name = "path")
     val path: String
 ) : BaseEntity() {

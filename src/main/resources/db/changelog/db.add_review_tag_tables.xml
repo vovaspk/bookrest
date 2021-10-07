@@ -17,13 +17,13 @@
                 <constraints nullable="false" unique="false"/>
             </column>
 
-            <column name="text" type="BIGINT">
+            <column name="text" type="VARCHAR(250)">
                 <constraints nullable="true" unique="false"/>
             </column>
             <column name="likes_count" type="BIGINT">
                 <constraints nullable="false" unique="false"/>
             </column>
-            <column name="rating" type="NUMERIC(1,1)">
+            <column name="rating" type="NUMERIC(2,1)">
                 <constraints nullable="false" unique="false"/>
             </column>
         </createTable>
@@ -42,7 +42,7 @@
 
         <createTable tableName="rest_tags">
             <column name="rest_id" type="BIGINT" autoIncrement="true">
-                <constraints primaryKey="true" nullable="false"/>
+                <constraints nullable="false"/>
             </column>
 
             <column name="tag_id" type="BIGINT">

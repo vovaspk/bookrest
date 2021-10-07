@@ -17,11 +17,11 @@ class Review(
     val user: User,
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "rest_id", nullable = false)
-    val restaurant: Restaurant,
+    var restaurant: Restaurant,
     @Column(name = "rating")
-    val rating: Double,
+    var rating: Double,
     @Column(name = "likes_count")
-    val likes: Int
+    var likes: Int
 ) : BaseEntity() {
 
 }

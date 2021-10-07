@@ -6,4 +6,5 @@
     <include file="classpath:db/changelog/db.add_user_verification.xml"/>
     <include file="classpath:db/changelog/db.add_restaurant_and_liked_and_photos_tables.xml"/>
     <include file="classpath:db/changelog/db.add_review_tag_tables.xml"/>
+    <include file="classpath:db/changelog/db.add-base-entity-attributes-to-tables.xml"/>
 </databaseChangeLog>

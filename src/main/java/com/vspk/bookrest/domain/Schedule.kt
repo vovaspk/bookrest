@@ -8,9 +8,9 @@ import javax.persistence.Table
 @Entity
 @Table(name = "schedule")
 class Schedule(
-    @OneToOne(mappedBy = "schedule")
-    val restaurant: Restaurant,
-    @Column(name = "moday")
+//    @OneToOne(mappedBy = "schedule")
+//    val restaurant: Restaurant,
+    @Column(name = "monday")
     val monday:String,
     @Column(name = "tuesday")
     val tuesday:String,

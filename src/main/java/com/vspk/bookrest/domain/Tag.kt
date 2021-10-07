@@ -7,8 +7,8 @@ import javax.persistence.ManyToMany
 
 @Entity
 class Tag(
-    @ManyToMany(mappedBy = "tags", fetch = FetchType.LAZY)
-    val restaurants: List<Restaurant>,
+//    @ManyToMany(mappedBy = "tags", fetch = FetchType.LAZY)
+//    val restaurants: List<Restaurant>? = null,//really need?
     @Column(name="text")
     val text: String
 ) : BaseEntity() {
