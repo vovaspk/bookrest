@@ -10,8 +10,8 @@ import javax.annotation.security.RolesAllowed
 @RequestMapping(value = ["/api/v1/admin/"])
 @RolesAllowed("ADMIN")
 @CrossOrigin(origins = ["*"])
-class AdminRestController(private val userService: UserService,
-                          private val adminUserService: AdminUserService) {
+class AdminController(private val userService: UserService,
+                      private val adminUserService: AdminUserService) {
 
     @GetMapping(value = ["users"])
     fun getUsers(): List<User> = userService.getAll()

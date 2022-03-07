@@ -21,13 +21,6 @@ class Role(
     val users: List<User>? = null
 ) : BaseEntity() {
 
-//    @Column(name = "name")
-//    val name: String? = null
-//
-//    @Transient
-//    @ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY)
-//    val users: List<User>? = null
-
     override fun toString(): String {
         return "Role{" +
                 "id: " + super.id + ", " +

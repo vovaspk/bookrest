@@ -20,7 +20,7 @@ import javax.validation.Valid
 @RolesAllowed("USER")
 @Api(value = "authorization entrypoint")
 @CrossOrigin(origins = ["*"])
-class AuthenticationRestController (
+class AuthenticationController (
     private val userAuthService: UserAuthService,
     private val userVerificationService: UserVerificationService
 ){

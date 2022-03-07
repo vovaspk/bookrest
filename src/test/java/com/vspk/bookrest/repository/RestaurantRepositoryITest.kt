@@ -69,15 +69,16 @@ open class RestaurantRepositoryITest(
             likedRestaurants = emptyList(),
             verificationTimesAsked = 1))
 
-
+//PREVIOS STEPS NEEDS TO BE DONE BEFORE SAVING RESTURANT
         val savedRestaurantt = restaurantRepository.save(restaurantToSave)
-
+//SAVING RESTAURANT
         val review = Review(text = "good place", user = user, rating = 4.5, restaurant = savedRestaurantt, likes = 5)
         reviewRepository.save(review)
         savedRestaurantt.reviews = listOf(review)
 
 
         val savedRestaurant = restaurantRepository.findById(savedRestaurantt.id!!).get()
+
         assertEquals(savedRestaurant.name, "piyana vyshnya");
         assertEquals(savedRestaurant.phone, "0973589391");
         assertEquals(savedRestaurant.thumbnail.id, thumbnail.id);
